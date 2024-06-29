@@ -1,189 +1,219 @@
 #include <iostream>
+
 using namespace std;
 
-struct Node {
-    long long data;
+struct Node{
+    int key;
     Node* left;
     Node* right;
 };
 
 typedef Node* node;
-typedef long long ll;
 
-node createNode(ll data) {
+node createNode(int key){
     node tmp = new Node();
+    tmp->key = key;
     tmp->left = NULL;
     tmp->right = NULL;
-    tmp->data = data;
     return tmp;
 }
 
-class BST {
+class BinaryTree {
 private:
     node root;
 
-    void ADD(node& root, ll data) {
-        if (root == NULL) root = createNode(data);
-        else if (data < root->data) ADD(root->left, data);
-        else ADD(root->right, data);
+    node insert(node root, int key){
+        if(root == NULL) return createNode(key);
+        if(key < root->key) root->left = insert(root->left, key);
+        else if(key > root->key) root->right = insert(root->right, key);
+        return root;
     }
 
-    void DELETE(node& root, ll data) {
-        if (root == NULL) return;
-        else if (data < root->data) DELETE(root->left, data);
-        else if (data > root->data) DELETE(root->right, data);
+    node deleteNode(node root, int key){
+        if(root == NULL) return root;
+        if(key < root->key) root->left = deleteNode(root->left, key);
+        else if(key > root->key) root->right = deleteNode(root->right, key);
         else {
-            if (root->left == NULL && root->right == NULL) root = NULL;
-            else if (root->left == NULL) root = root->right;
-            else if (root->right == NULL) root = root->left;
-            else {
-                node tmp = root->right;
-                while (tmp->left != NULL) tmp = tmp->left;
-                root->data = tmp->data;
-                DELETE(root->right, tmp->data);
+            if(root->left == NULL){
+                node temp = root->right;
+                delete root;
+                return temp;
+            }else if (root->right == NULL){
+                node temp = root->left;
+                delete root;
+                return temp;
             }
+            node temp = minValueNode(root->right);
+            root->key = temp->key;
+            root->right = deleteNode(root->right, temp->key);
         }
+        return root;
     }
 
-    ll MINIMUM(node root) {
-        if (root == NULL) return -1;
-        if (root->left == NULL) return root->data;
-        while (root->left != NULL) root = root->left;
-        return root->data;
+    node minValueNode(node root){
+        node current = root;
+        while(current && current->left != NULL) current = current->left;
+        return current;
     }
 
-    ll MAXIMUM(node root) {
-        if (root == NULL) return -1;
-        if (root->right == NULL) return root->data;
-        while (root->right != NULL) root = root->right;
-        return root->data;
+    node maxValueNode(node root){
+        node current = root;
+        while(current && current->right != NULL) current = current->right;
+        return current;
     }
 
-    ll SUCC(node root, ll data) {
+    node successor(node root, int key){
         node succ = NULL;
-        while (root != NULL) {
-            if (data < root->data) {
+        while(root != NULL){
+            if(key < root->key){
                 succ = root;
                 root = root->left;
-            } else {
-                root = root->right;
-            }
+            } else root = root->right;
         }
-        return succ ? succ->data : -1;
+        return succ;
     }
 
-    ll SUCC_2(node root, ll data) {
-        if (root == NULL) return -1;
-        if (root->data <= data) {
-            return SUCC_2(root->right, data);
-        } else {
-            ll leftSucc = SUCC_2(root->left, data);
-            return (leftSucc != -1 && leftSucc >= data) ? leftSucc : root->data;
+    node successorOrEqual(node root, int key){
+        node succ = NULL;
+        while(root != NULL){
+            if(key <= root->key){
+                succ = root;
+                root = root->left;
+            } else root = root->right;
         }
+        return succ;
     }
 
-    ll PRED(node root, ll data) {
+    node predecessor(node root, int key){
         node pred = NULL;
-        while (root != NULL) {
-            if (data > root->data) {
+        while(root != NULL){
+            if(key > root->key){
                 pred = root;
                 root = root->right;
-            } else {
-                root = root->left;
-            }
+            } else root = root->left;
         }
-        return pred ? pred->data : -1;
+        return pred;
     }
 
-    ll PRED_2(node root, ll data) {
-        if (root == NULL) return -1;
-        if (root->data >= data) {
-            return PRED_2(root->left, data);
-        } else {
-            ll rightPred = PRED_2(root->right, data);
-            return (rightPred != -1 && rightPred <= data) ? rightPred : root->data;
+    node predecessorOrEqual(node root, int key){
+        node pred = NULL;
+        while(root){
+            if(key >= root->key){
+                pred = root;
+                root = root->right;
+            } else root = root->left;
         }
+        return pred;
     }
 
 public:
-    BST() { root = NULL; }
-    void ADD(ll data) {
-        ADD(root, data);
+    BinaryTree(){
+        root = NULL;
     }
 
-    void DELETE(ll data) {
-        DELETE(root, data);
+    void ADD(int key){
+        root = insert(root, key);
     }
 
-    ll MINIMUM() {
-        return MINIMUM(root);
+    void DELETE(int key){
+        root = deleteNode(root, key);
     }
 
-    ll MAXIMUM() {
-        return MAXIMUM(root);
+    int MINIMUM(){
+        node tmp = minValueNode(root);
+        return tmp ? tmp->key : -1;
     }
 
-    ll SUCC(ll data) {
-        return SUCC(root, data);
+    int MAXIMUM(){
+        node tmp = maxValueNode(root);
+        return tmp ? tmp->key : -1;
     }
 
-    ll SUCC_2(ll data) {
-        return SUCC_2(root, data);
+    int SUCC(int key){
+        node tmp = successor(root, key);
+        return tmp ? tmp->key : -1;
     }
 
-    ll PRED(ll data) {
-        return PRED(root, data);
+    int SUCC_2(int key){
+        node tmp = successorOrEqual(root, key);
+        return tmp ? tmp->key : -1;
     }
 
-    ll PRED_2(ll data) {
-        return PRED_2(root, data);
+    int PRED(int key){
+        node tmp = predecessor(root, key);
+        return tmp ? tmp->key : -1;
+    }
+
+    int PRED_2(int key){
+        node tmp = predecessorOrEqual(root, key);
+        return tmp ? tmp->key : -1;
     }
 };
 
-int main() {
-    BST b;
-    while (true) {
-        ll opt; cin >> opt;
-        ll x;
+int main(){
+    BinaryTree tree;
+    int option, x;
 
-        if (opt == 1) {
-            cin >> x;
-            b.ADD(x);
-        } else if (opt == 2) {
-            cin >> x;
-            b.DELETE(x);
-        } else if (opt == 3) {
-            ll minVal = b.MINIMUM();
-            if (minVal == -1) cout << "empty" << endl;
-            else cout << minVal << endl;
-        } else if (opt == 4) {
-            ll maxVal = b.MAXIMUM();
-            if (maxVal == -1) cout << "empty" << endl;
-            else cout << maxVal << endl;
-        } else if (opt == 5) {
-            cin >> x;
-            ll succ = b.SUCC(x);
-            if (succ == -1) cout << "no" << endl;
-            else cout << succ << endl;
-        } else if (opt == 6) {
-            cin >> x;
-            ll succ2 = b.SUCC_2(x);
-            if (succ2 == -1) cout << "no" << endl;
-            else cout << succ2 << endl;
-        } else if (opt == 7) {
-            cin >> x;
-            ll pred = b.PRED(x);
-            if (pred == -1) cout << "no" << endl;
-            else cout << pred << endl;
-        } else if (opt == 8) {
-            cin >> x;
-            ll pred2 = b.PRED_2(x);
-            if (pred2 == -1) cout << "no" << endl;
-            else cout << pred2 << endl;
-        } else {
-            break;
-        }   
+    while(cin >> option){
+        if(option == 0) break;
 
-        if (opt == 0) break;
+        switch(option){
+            case 1: // ADD
+                cin >> x;
+                tree.ADD(x);
+                break;
+            case 2: // DELETE
+                cin >> x;
+                tree.DELETE(x);
+                break;
+            case 3: // MINIMUM
+                {
+                    int minVal = tree.MINIMUM();
+                    if (minVal == -1) cout << "empty" << endl;
+                    else cout << minVal << endl;
+                }
+                break;
+            case 4: // MAXIMUM
+                {
+                    int maxVal = tree.MAXIMUM();
+                    if (maxVal == -1) cout << "empty" << endl;
+                    else cout << maxVal << endl;
+                }
+                break;
+            case 5: // SUCC
+                cin >> x;
+                {
+                    int succ = tree.SUCC(x);
+                    if (succ == -1) cout << "no" << endl;
+                    else cout << succ << endl;
+                }
+                break;
+            case 6: // SUCC_2
+                cin >> x;
+                {
+                    int succ2 = tree.SUCC_2(x);
+                    if (succ2 == -1) cout << "no" << endl;
+                    else cout << succ2 << endl;
+                }
+                break;
+            case 7: // PRED
+                cin >> x;
+                {
+                    int pred = tree.PRED(x);
+                    if (pred == -1) cout << "no" << endl;
+                    else cout << pred << endl;
+                }
+                break;
+            case 8: // PRED_2
+                cin >> x;
+                {
+                    int pred2 = tree.PRED_2(x);
+                    if (pred2 == -1) cout << "no" << endl;
+                    else cout << pred2 << endl;
+                }
+                break;
+        }
     }
+
+    return 0;
 }
