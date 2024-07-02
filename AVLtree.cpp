@@ -62,7 +62,7 @@ private:
 
     node minValueNode(node n){
         node current = n;
-        while (current->left != NULL)
+        while(current->left != NULL)
             current = current->left;
         return current;
     }
@@ -91,13 +91,13 @@ private:
             return leftRotate(root);
 
         // Left Right Case
-        if(balance > 1 && data > root->left->data) {
+        if(balance > 1 && data > root->left->data){
             root->left = leftRotate(root->left);
             return rightRotate(root);
         }
 
         // Right Left Case
-        if(balance < -1 && data < root->right->data) {
+        if(balance < -1 && data < root->right->data){
             root->right = rightRotate(root->right);
             return leftRotate(root);
         }
@@ -105,36 +105,29 @@ private:
         return root;
     }
 
-    node deleteNode(node root, int data){
-        if(root == NULL) return root;
+    void deleteNode(node &root, int data){
+        if(root == NULL) return;
 
-        if(data < root->data)
-            root->left = deleteNode(root->left, data);
-        else if(data > root->data)
-            root->right = deleteNode(root->right, data);
+        if(data < root->data) deleteNode(root->left, data);
+        else if(data > root->data) deleteNode(root->right, data);
         else{
-            if((root->left == NULL) || (root->right == NULL)){
-                node temp = NULL;
-                (root->left) ? temp = root->left : temp = root->right;
-
-                if(temp == NULL){
-                    temp = root;
-                    root = NULL;
-                } else {
-                    *root = *temp;
-                }
-
-                delete temp;
+            if(root->left == NULL){
+                node tmp = root;
+                root = root->right;
+                delete tmp;
+            } else if (root->right == NULL){
+                node tmp = root;
+                root = root->left;
+                delete tmp;
             } else {
-                node temp = minValueNode(root->right);
-
-                root->data = temp->data;
-
-                root->right = deleteNode(root->right, temp->data);
+                node tmp = root->right;
+                while (tmp->left != NULL) tmp = tmp->left;
+                root->data = tmp->data;
+                deleteNode(root->right, tmp->data);
             }
         }
 
-        if(root == NULL) return root;
+        if(root == NULL) return;
 
         root->height = 1 + max(height(root->left), height(root->right));
 
@@ -142,25 +135,23 @@ private:
 
         // Left Left Case
         if(balance > 1 && getBalance(root->left) >= 0)
-            return rightRotate(root);
+            root = rightRotate(root);
 
         // Left Right Case
         if(balance > 1 && getBalance(root->left) < 0){
             root->left = leftRotate(root->left);
-            return rightRotate(root);
+            root = rightRotate(root);
         }
 
         // Right Right Case
         if(balance < -1 && getBalance(root->right) <= 0)
-            return leftRotate(root);
+            root = leftRotate(root);
 
         // Right Left Case
         if(balance < -1 && getBalance(root->right) > 0){
             root->right = rightRotate(root->right);
-            return leftRotate(root);
+            root = leftRotate(root);
         }
-
-        return root;
     }
 
 
@@ -178,7 +169,7 @@ public:
     }
 
     void remove(int data){
-        root = deleteNode(root, data);
+        deleteNode(root, data);
     }
 
     void insert(int data){
