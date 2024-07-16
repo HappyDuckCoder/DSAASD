@@ -22,7 +22,7 @@ void mergeSort(vi &a, int l, int r);
 void radixSort(vi &a, int n);
 void countingSort(vi &a, int n);
 
-int lowerbound(vi &a, int left, int right, int x){
+int upperbound(vi &a, int left, int right, int x){
     while(left < right){
         int mid = (left + right) / 2;
         if(a[mid] < x) left = mid + 1;
@@ -150,7 +150,7 @@ void interchangeSort(vi &a, int n){
 void binaryinsertionSort(vi &a, int n){
     for(int i = 1; i < n; i++) {
         int v = a[i];
-        int pos = lowerbound(a, 0, i, v);
+        int pos = upperbound(a, 0, i, v);
         
         for(int j = i; j > pos; j--)
             a[j] = a[j - 1];
