@@ -26,15 +26,16 @@ void init(){
 void BFS(int u){
     queue<int> q;
     q.push(u); 
+    visited[u] = true;
 
     while(!q.empty()){
         u = q.front();
         cout << u << " ";
         q.pop();
-        visited[u] = true;
         for(int v : adj[u]){
             if(!visited[v]){
                 q.push(v);
+                visited[u] = true;
             }
         }
     }
@@ -44,7 +45,7 @@ void BFS(int u){
 int main(){
 
     init();
-    BFS(1);
+    BFS(0);
 
     return 0;
 }

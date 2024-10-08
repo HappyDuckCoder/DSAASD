@@ -51,9 +51,6 @@ int n = 10;
 int main() {
     int originalArray[10] = {10, 7, 4, 3, 6, 5, 1, 8, 9, 2};
 
-    heapSort(a, n);
-    print(a, n);
-
     return 0;
 }
 
@@ -191,7 +188,7 @@ void mergeSort(int a[], int left, int right, int b[]){
 }
 
 void binaryInsertionSort(int a[], int n){
-    int i, locate, j, selected;
+    int i, locate, j, k, selected;
     for(i = 1; i < n; ++i){
         j = i - 1;
         selected = a[i];

@@ -1,0 +1,99 @@
+1                 1                 1                 1                  1
+7    cmp(3,4)     7    cmp(3,5)     7    cmp(3,7)     3    cmp(1,3)      3
+5 --------------> 5 --------------> 3 --------------> 7 -------------->  7
+3                 3                 5                 5                  5
+4                 4                 4                 4                  4 
+
+1                 1                 1                 1                  
+3    cmp(4,5)     3    cmp(4,7)     3    cmp(4,3)     3        
+7 --------------> 7 --------------> 4 --------------> 4  
+5                 4                 7                 7                  
+4                 5                 5                 5                  
+
+
+
+
+1 (top line)      1                 1                 1                 1                 1                 1 
+5                 5                 5                 5                 5                 2                 2 (top line) (save line)
+3    cmp(2, 8)    3    cmp(2, 9)    3    cmp(2, 7)    3   cmp(2, 3)     2    cmp(2, 5)    5    cmp(1, 2)    5 
+7 --------------> 7 --------------> 7 --------------> 2 --------------> 3 --------------> 3 --------------> 3 
+9                 9                 2                 7                 7                 7                 7
+8                 2                 9                 9                 9                 9                 9
+2 (bottom line)   8                 8                 8                 8                 8                 8 (bottom line)
+  (save line)
+
+1                 1                 1                 1                 1                 1                  
+2 (top line)      2                 2                 2                 2                 2 (top line) 
+5    cmp(2, 5)    5    cmp(5, 3)    3    cmp(5, 7)    3   cmp(7, 9)     3    cmp(8, 9)    3        
+3 --------------> 3 --------------> 5 --------------> 5 --------------> 5 --------------> 5  
+7                 7                 7                 7                 7                 7                 
+9                 9                 9                 9                 9                 8 (bottom line) (save line)        
+8 (bottom line)   8                 8                 8                 8                 9                 
+  
+
+1                 1                 1                 1                 1                                   
+2 (top line)      2                 2                 2                 2  (top line = bottom line)         
+3    cmp(7, 8)    3    cmp(5, 7)    3    cmp(3, 5)    3   cmp(2, 3)     3              
+4 --------------> 5 --------------> 5 --------------> 5 --------------> 5  
+7                 7                 7                 7                 7                                  
+8 (bottom line)   8                 8                 8                 8                    
+9                 9                 9                 9                 9                       
+
+original array
+8	9	6	1	4	7	2	3
+
+step 1: loop all element of the array to find the smallest
+smallest: 1; Do not change 1 anymore, 
+swap 1 and 8 then we have a new array 
+1	9	6	8	4	7	2	3
+
+step 2: loop all element of the array start from second index to find the smallest
+smallest: 2
+swap 9 and 2 then we have a new array 
+1 2 6 8 4 7 9 3 
+
+step 3: loop all element of the array start from 3th index to find the smallest
+smallest: 3
+swap 6 and 3 then we have a new array 
+1 2 3 8 4 7 9 6 
+
+step 4: loop all element of the array start from 4th index to find the smallest
+smallest: 4
+swap 4 and 8 then we have a new array 
+1 2 3 4 8 7 9 6 
+
+step 5: loop all element of the array start from 5th index to find the smallest
+smallest: 6
+swap 6 and 8 then we have a new array 
+1 2 3 4 6 7 9 8
+
+step 6: loop all element of the array start from 6th index to find the smallest
+smallest: 7
+swap 7 and 7 then we have a new array 
+1 2 3 4 6 7 9 8
+
+step 7: loop all element of the array start from 7th index to find the smallest
+smallest: 8
+swap 8 and 9 then we have a new array 
+1 2 3 4 6 7 8 9 
+
+original array
+8	9	6	1	4	7	2	3 
+round1: 
+8 9 6 1 4 7 2 3 no swap
+6 9 8 1 4 7 2 3 swap(8, 6)
+1 9 8 6 4 7 2 3 swap(6, 1) [1 is in the correct position]
+1 9 8 6 4 7 2 3 no swap
+1 9 8 6 4 7 2 3 no swap
+1 9 8 6 4 7 2 3 no swap
+1 9 8 6 4 7 2 3 no swap
+round2: 
+1 9 8 6 4 7 2 3 no swap
+1 6 8 9 4 7 2 3 swap(6, 9)
+1 4 8 9 6 7 2 3 swap(4, 6)
+1 4 8 9 6 7 2 3 no swap
+1 2 8 9 6 7 4 3 swap(2, 4)
+1 2 8 9 6 7 4 3 no swap
+... 
+round7: 
+1 2 3 4 6 7 8 9 

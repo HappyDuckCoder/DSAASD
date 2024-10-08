@@ -31,7 +31,7 @@ void DFS(int u){
 
 int main(){
     init();
-    DFS(1);
+    DFS(0);
 
     return 0;
 }

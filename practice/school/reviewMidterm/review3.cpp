@@ -52,6 +52,7 @@ void merge(vi &a, int l, int m, int r){
     int n_right = r - m;
     vi left(n_left), right(n_right);
     
+    // copy left and right side to another array 
     for(int i = 0; i < n_left; i++)
         left[i] = a[l + i];
     for(int i = 0; i < n_right; i++)
@@ -60,6 +61,8 @@ void merge(vi &a, int l, int m, int r){
     int i_left = 0, i_right = 0;
     int index = l;
     
+    // iteratively travel from each left and right array to 
+    // build the reconnect array
     while(i_left < n_left && i_right < n_right){
         if(left[i_left] <= right[i_right]){
             a[index] = left[i_left];
